@@ -17,6 +17,7 @@ using BlazorWeb.Areas.Identity;
 using BlazorWeb.Data;
 using DataLayer.Entities;
 using DataLayer;
+using ServiceLayer.ProjectService;
 
 namespace BlazorWeb
 {
@@ -41,6 +42,7 @@ namespace BlazorWeb
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<Customer>>();
             services.AddSingleton<WeatherForecastService>();
         }

@@ -1,7 +1,37 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<div class="card-deck">
+    @foreach (Product product in ProductList)
+    {
+        <div class="col-sm-3">
+            <div class="card my-3">
+                @if (product.Images.Count > 0)
+                {
+                    <img class="card-img-top" src="@product.Images.FirstOrDefault().Image">
+                }
+                else
+                {
+                    <img class="card-img-top" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Price</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="/Detail/@product.ProductId">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
-Welcome to your new app.
+@code{
+    private List<Product> ProductList;
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override void OnInitialized()
+    {
+        ProductList = _ProductService.GetProducts().ToList();
+    }
+}
