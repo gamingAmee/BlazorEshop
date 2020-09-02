@@ -36,12 +36,12 @@ namespace BlazorWeb
             services.AddDbContext<EshopContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"))).ToString();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<EshopContext>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<Customer>>();
             services.AddSingleton<WeatherForecastService>();
         }
 
