@@ -6,12 +6,12 @@ namespace ServiceLayer.ProjectService
 {
     public interface IProjectService
     {
-        Task<Product> Create(Product newProduct);
-        Task<Product> Delete(int productId);
+        Task<Product> CreateProduct(Product newProduct);
+        Task<Product> DeleteProduct(int productId);
         IQueryable<Category> GetCategories();
-        IQueryable<Manufacturer> GetProducenter();
+        IQueryable<Manufacturer> GetManufacturers();
         IQueryable<Product> GetProducts();
         IQueryable<Product> GetProduktById(int productId);
-        Task<Product> Update(Product updatedProduct);
+        Task<Product> UpdateProduct(Product updatedProduct);
     }
 }

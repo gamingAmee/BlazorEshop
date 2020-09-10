@@ -1,0 +1,30 @@
+﻿@page "/Admin/AdminIndex"
+<a href="Admin/Create" class="btn btn-info">Add New</a>
+
+<table class="table">
+    @foreach (var product in ProductList)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>
+                <a asp-page="./Edit" asp-route-produktId="@product.ProductId">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </td>
+            <td>
+                <a asp-page="./Delete" asp-route-produktId="@product.ProductId">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+@code {
+    private List<Product> ProductList;
+
+    protected override void OnInitialized()
+    {
+        ProductList = _ProductService.GetProducts().ToList();
+    }
+}

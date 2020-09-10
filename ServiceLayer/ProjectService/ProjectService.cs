@@ -18,36 +18,62 @@ namespace ServiceLayer.ProjectService
             _context = context;
         }
 
+        /// <summary>
+        /// Gets all Products
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<Product> GetProducts()
         {
             return _context.Products.AsNoTracking().Include(i => i.Images).Include(c => c.Category).Include(m => m.Manufacturer);
         }
 
+        /// <summary>
+        /// Gets all Categories
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<Category> GetCategories()
         {
             return _context.Categorys;
         }
 
-        public IQueryable<Manufacturer> GetProducenter()
+        /// <summary>
+        /// Gets all Manufacturers
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<Manufacturer> GetManufacturers()
         {
             return _context.Manufacturers;
         }
 
+        /// <summary>
+        /// Gets Product by id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public IQueryable<Product> GetProduktById(int productId)
         {
             return _context.Products.AsNoTracking().Include(p => p.Images).Include(c => c.Category).Include(m => m.Manufacturer).Where(p => p.ProductId == productId);
         }
 
-
-        public async Task<Product> Create(Product newProduct)
+        /// <summary>
+        /// Create a new Product
+        /// </summary>
+        /// <param name="newProduct"></param>
+        /// <returns></returns>
+        public async Task<Product> CreateProduct(Product newProduct)
         {
             Product product = new Product { Name = newProduct.Name, Price = newProduct.Price, CategoryId = newProduct.CategoryId, ManufacturerId = newProduct.ManufacturerId };
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            await _context.Products.AddAsync(product);
+            _context.SaveChanges();
             return newProduct;
         }
 
-        public async Task<Product> Update(Product updatedProduct)
+        /// <summary>
+        /// Updates a Product
+        /// </summary>
+        /// <param name="updatedProduct"></param>
+        /// <returns></returns>
+        public async Task<Product> UpdateProduct(Product updatedProduct)
         {
             Product product = new Product { ProductId = updatedProduct.ProductId, Name = updatedProduct.Name, Price = updatedProduct.Price, CategoryId = updatedProduct.CategoryId, ManufacturerId = updatedProduct.ManufacturerId };
             _context.Products.Update(product);
@@ -56,7 +82,12 @@ namespace ServiceLayer.ProjectService
             return updatedProduct;
         }
 
-        public async Task<Product> Delete(int productId)
+        /// <summary>
+        /// Deletes a Product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public async Task<Product> DeleteProduct(int productId)
         {
             Product product = await _context.Products.Include(p => p.Images).SingleOrDefaultAsync(p => p.ProductId == productId);
             if (product != null)
