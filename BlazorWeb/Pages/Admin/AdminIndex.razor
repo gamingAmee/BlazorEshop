@@ -7,12 +7,12 @@
         <tr>
             <td>@product.Name</td>
             <td>
-                <a asp-page="./Edit" asp-route-produktId="@product.ProductId">
+                <a href="/Admin/Edit/@product.ProductId" >
                     <i class="fas fa-edit"></i>
                 </a>
             </td>
             <td>
-                <a asp-page="./Delete" asp-route-produktId="@product.ProductId">
+                <a href="/Admin/Delete/@product.ProductId">
                     <i class="fas fa-trash"></i>
                 </a>
             </td>

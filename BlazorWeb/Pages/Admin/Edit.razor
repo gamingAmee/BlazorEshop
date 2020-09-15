@@ -1,0 +1,78 @@
+﻿@page "/Admin/Edit/{produktId:int}"
+@inject NavigationManager NavManager
+
+@if (product != null)
+{
+    <h3>Edit</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">Product name</label>
+                    <input @bind="product.Name" required class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Price</label>
+                    <input type="number" @bind="product.Price" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Manufacturer</label>
+                    <select @bind="product.ManufacturerId" class="form-control">
+                        <option value="">Choose a manufacturer</option>
+                        @foreach (var item in manufacturers)
+                        {
+                            <option value="@item.ManufacturerId">@item.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select @bind="product.CategoryId" class="form-control">
+                        <option value="">Choose a category</option>
+                        @foreach (var item in categories)
+                        {
+                            <option value="@item.CategoryId">@item.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" @onclick="UpdateProduct" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <h3>The product was not found</h3>
+}
+
+
+@code {
+    [Parameter]
+    public int produktId { get; set; }
+
+    private List<Manufacturer> manufacturers;
+
+    private List<Category> categories;
+
+    private Product product;
+
+    protected override void OnInitialized()
+    {
+        manufacturers = _ProductService.GetManufacturers().ToList();
+        categories = _ProductService.GetCategories().ToList();
+
+        product = _ProductService.GetProduktById(produktId).FirstOrDefault();
+    }
+
+    private async Task UpdateProduct()
+    {
+        await _ProductService.UpdateProduct(product);
+
+        NavManager.NavigateTo("/Admin/AdminIndex");
+    }
+
+}
