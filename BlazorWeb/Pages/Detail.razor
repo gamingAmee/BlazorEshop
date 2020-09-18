@@ -2,24 +2,20 @@
 
 @if (product != null)
 {
-    <h2>@product.Name</h2>
+    <h2 class="text-center">@product.Name</h2>
     <div>
         @if (product.Images.Count == 0)
         {
-            <img class="card-img-top" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+            <img class="img-thumbnail my-4 detail-img" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
         }
         else
         {
-            <img src="@product.Images.FirstOrDefault().Image" alt="Alternate Text" class="img-thumbnail my-4" />
+            <img src="@product.Images.FirstOrDefault().Image" alt="Alternate Text" class="img-thumbnail my-4 detail-img" />
         }
     </div>
 
-    <div>
-        Id: @product.ProductId
-    </div>
-    <div>
-        Pris: @product.Price
-    </div>
+    
+    <h3 class="text-center">Pris: @product.Price</h3> 
 }
 else
 {
