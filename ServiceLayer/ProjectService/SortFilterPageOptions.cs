@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ServiceLayer.ProjectService
 {
-    public class SortFliterPageOptions
+    public class SortFilterPageOptions
     {
         #region ORDERING
         public OrderByOptions OrderByOptions { get; set; }
@@ -25,7 +25,7 @@ namespace ServiceLayer.ProjectService
 
         public int NumPages { get; private set; }
 
-        public void SetupRestOfDto<T>(IQueryable<T> query)
+        public void SetupRestOfProducts<T>(IQueryable<T> query)
         {
             NumPages = (int)Math.Ceiling((double)query.Count() / PageSize);
             PageNum = Math.Min(Math.Max(1, PageNum), NumPages);

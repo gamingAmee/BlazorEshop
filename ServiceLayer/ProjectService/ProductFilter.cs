@@ -14,9 +14,9 @@ namespace ServiceLayer.ProjectService
         [Display(Name = "All")]
         NoFilter = 0,
         [Display(Name = "By Navn...")]
-        ByNavn,
+        ByName,
         [Display(Name = "By Pris...")]
-        ByPris
+        ByPrice
     }
 
     public static class ProductFilter

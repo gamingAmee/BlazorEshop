@@ -6,6 +6,7 @@ using DataLayer;
 using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using DataLayer.QueryObjects;
 
 namespace ServiceLayer.ProjectService
 {
@@ -25,6 +26,17 @@ namespace ServiceLayer.ProjectService
         public IQueryable<Product> GetProducts()
         {
             return _context.Products.AsNoTracking().Include(i => i.Images).Include(c => c.Category).Include(m => m.Manufacturer);
+        }
+
+        public IQueryable<Product> SortFilterPage(SortFilterPageOptions options)
+        {
+            var ProductQuery = _context.Products
+                .AsNoTracking()
+                .OrderProductsBy(options.OrderByOptions)
+                .FilterProductsBy(options.FilterBy, options.FilterValue);
+
+            options.SetupRestOfProducts(ProductQuery);
+            return ProductQuery.Page(options.PageNum - 1, options.PageSize);
         }
 
         /// <summary>

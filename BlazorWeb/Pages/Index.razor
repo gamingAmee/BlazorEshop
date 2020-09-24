@@ -1,37 +1,57 @@
 ﻿@page "/"
 
 <div class="card-deck">
-    @foreach (Product product in ProductList)
-    {
-        <div class="col-sm-3">
-            <div class="card my-3">
-                @if (product.Images.Count > 0)
-                {
-                    <img class="card-img-top" src="@product.Images.FirstOrDefault().Image">
-                }
-                else
-                {
-                    <img class="card-img-top" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
-                }
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">@product.Price</p>
-                </div>
-                <div class="card-footer text-muted">
-                    <a href="/Detail/@product.ProductId">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    }
+	@foreach (Product product in ProductList)
+	{
+		<div class="col-sm-3">
+			<div class="card my-3">
+				@if (product.Images.Count > 0)
+				{
+					<img class="card-img-top" src="@product.Images.FirstOrDefault().Image">
+				}
+				else
+				{
+					<img class="card-img-top" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+				}
+				<div class="card-body">
+					<h5 class="card-title">@product.Name</h5>
+					<p class="card-text">@product.Price</p>
+				</div>
+				<div class="card-footer text-muted">
+					<a href="/Detail/@product.ProductId">
+						<i class="fas fa-info-circle"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	}
 </div>
 
 @code{
-    private List<Product> ProductList;
+	private List<Product> ProductList;
 
-    protected override void OnInitialized()
-    {
-        ProductList = _ProductService.GetProducts().ToList();
-    }
+	private SortFilterPageOptions SortFilterPage { get; set; }
+
+	private OrderByOptions orderBy;
+
+	private List<OrderByOptions> options;
+
+	private string SearchTerm;
+
+	#region Page
+	public int CurrentPage { get; set; } = 1;
+	public int Count { get; set; }
+	public int PageSize { get; set; } = 10;
+
+	public int TotalPages { get; set; }
+	#endregion
+
+	protected override void OnInitialized()
+	{
+		SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = CurrentPage, PageSize = PageSize };
+
+		ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+		TotalPages = SortFilterPage.NumPages;
+	}
 }
