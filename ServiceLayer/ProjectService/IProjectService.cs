@@ -13,6 +13,6 @@ namespace ServiceLayer.ProjectService
         IQueryable<Product> GetProducts();
         IQueryable<Product> GetProduktById(int productId);
         Task<Product> UpdateProduct(Product updatedProduct);
-        IQueryable<Product> SortFilterPage(SortFilterPageOptions options)
+        IQueryable<Product> SortFilterPage(SortFilterPageOptions options);
     }
 }

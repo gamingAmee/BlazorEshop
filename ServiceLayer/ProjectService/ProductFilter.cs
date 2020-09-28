@@ -32,9 +32,9 @@ namespace ServiceLayer.ProjectService
             {
                 case ProductsFilterBy.NoFilter:
                     return products;
-                case ProductsFilterBy.ByNavn:
+                case ProductsFilterBy.ByName:
                     return products.Where(x => EF.Functions.Like(x.Name, $"%{filterValue}%"));
-                case ProductsFilterBy.ByPris:
+                case ProductsFilterBy.ByPrice:
                     return products.Where(x => x.Price <= int.Parse(filterValue));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(filterBy), filterBy, null);

@@ -32,6 +32,7 @@ namespace ServiceLayer.ProjectService
         {
             var ProductQuery = _context.Products
                 .AsNoTracking()
+                .Include(i => i.Images)
                 .OrderProductsBy(options.OrderByOptions)
                 .FilterProductsBy(options.FilterBy, options.FilterValue);
 
