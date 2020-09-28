@@ -24,11 +24,11 @@
 <div class="card-deck">
     @foreach (Product product in ProductList)
     {
-        <div class="col-sm-3">
+        <div class="col-md-3">
             <div class="card my-3">
                 @if (product.Images.Count > 0)
                 {
-                    <img class="card-img-top" src="@product.Images.FirstOrDefault().Image">
+                    <img class="card-img-top index-img" src="@product.Images.FirstOrDefault().Image">
                 }
                 else
                 {

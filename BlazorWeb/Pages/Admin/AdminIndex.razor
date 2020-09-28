@@ -7,15 +7,15 @@
         <tr>
             @if (product.Images.Count == 0)
             {
-                <td>
+                <td class="col-md-2">
                     <img class="detail-img" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
                 </td>
             }
             else
             {
-                <td>
-                    <div>
-                        <img src="@product.Images.FirstOrDefault().Image" alt="Alternate Text" class="Admin-img" />
+                <td class="col-md-2">
+                    <div class="Admin-img">
+                        <img src="@product.Images.FirstOrDefault().Image" alt="Alternate Text" />
                     </div>
                     
                 </td>

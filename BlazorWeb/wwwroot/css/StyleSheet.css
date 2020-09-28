@@ -8,7 +8,7 @@
     margin-right:auto;
 }
 
-.Admin-img {
-    max-width: 5%;
-    max-height:5%;
+.Admin-img img {
+    max-width: 50%;
+    max-height: 25%;
 }
