@@ -33,6 +33,10 @@ namespace ServiceLayer.ProjectService
                 case ProductsFilterBy.NoFilter:
                     return products;
                 case ProductsFilterBy.ByName:
+                    if (products.Where(x => EF.Functions.Like(x.Name, $"%{filterValue}%")).Count() == 0)
+                    {
+                        return products;
+                    }
                     return products.Where(x => EF.Functions.Like(x.Name, $"%{filterValue}%"));
                 case ProductsFilterBy.ByPrice:
                     return products.Where(x => x.Price <= int.Parse(filterValue));

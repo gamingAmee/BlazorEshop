@@ -70,12 +70,12 @@
 
     private IEnumerable<SelectListItem> OrderByList;
 
-    private string SearchTerm;
+    private string SearchTerm { get; set; }
 
     #region Page
     public int CurrentPage { get; set; } = 1;
     public int Count { get; set; }
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } = 5;
 
     public int TotalPages { get; set; }
     #endregion
@@ -95,8 +95,7 @@
     {
         if (PageNumber < 1) PageNumber = 1;
 
-        // adapt the service to take pageIndex, pageSize
-        SortFilterPage = new SortFilterPageOptions { PageNum = PageNumber , PageSize = PageSize };
+        SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = PageNumber, PageSize = PageSize };
 
         ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
     }
@@ -106,5 +105,7 @@
         SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = CurrentPage, PageSize = PageSize };
 
         ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        TotalPages = SortFilterPage.NumPages;
     }
 }
