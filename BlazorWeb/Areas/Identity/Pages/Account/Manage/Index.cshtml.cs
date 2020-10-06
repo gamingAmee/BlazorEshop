@@ -25,6 +25,9 @@ namespace BlazorWeb.Areas.Identity.Pages.Account.Manage
 
         public string Username { get; set; }
 
+        [Display(Name = "Fullname")]
+        public string FullName { get; set; }
+
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -36,6 +39,9 @@ namespace BlazorWeb.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Address")]
+            public string Address { get; set; }
         }
 
         private async Task LoadAsync(Customer user)
@@ -45,9 +51,12 @@ namespace BlazorWeb.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
 
+            FullName = user.FirstName + user.LastName;
+
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Address = user.Address
             };
         }
 
