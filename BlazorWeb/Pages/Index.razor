@@ -6,19 +6,19 @@
 <div class="input-group mb-3">
     <input type="search" @bind="SearchTerm" class="form-control">
     <div class="input-group-append">
-        <button class="btn btn-outline-secondary" @onclick="@Search">
+        <button type="button" class="btn btn-outline-secondary" @onclick="@Search">
             <i class="fas fa-search"></i>
         </button>
     </div>
 </div>
-<div class="form-group">
+@*<div class="form-group">
     <select @bind="orderBy" class="form-control">
         @foreach (var item in OrderByList)
         {
             <option value="@item.Text">@item.Text</option>
         }
     </select>
-</div>
+</div>*@
 
 
 <div class="card-deck">
@@ -51,7 +51,7 @@
     <ul class="pagination">
         @for (var i = 1; i <= TotalPages; i++)
         {
-            <li class="page-item @(i == PageNumber ? "active" : "")">
+            <li class="page-item @(i == CurrentPage ? "active" : "")">
                 <a href="Index/@i" class="page-link">@i</a>
             </li>
         }
@@ -66,27 +66,27 @@
 
     private SortFilterPageOptions SortFilterPage { get; set; }
 
-    private OrderByOptions orderBy;
+    private OrderByOptions orderBy { get; set; }
 
-    private IEnumerable<SelectListItem> OrderByList;
+    private IEnumerable<SelectListItem> OrderByList { get; set; }
 
     private string SearchTerm { get; set; }
 
     #region Page
     public int CurrentPage { get; set; } = 1;
     public int Count { get; set; }
-    public int PageSize { get; set; } = 5;
+    public int PageSize { get; set; } = 30;
 
     public int TotalPages { get; set; }
     #endregion
 
     protected override void OnInitialized()
     {
-        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
-
         SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = CurrentPage, PageSize = PageSize };
 
         ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
 
         TotalPages = SortFilterPage.NumPages;
     }
@@ -95,16 +95,28 @@
     {
         if (PageNumber < 1) PageNumber = 1;
 
+        CurrentPage = PageNumber;
+
         SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = PageNumber, PageSize = PageSize };
 
         ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
     }
 
     private void Search()
     {
+        if (PageNumber > 1)
+        {
+            PageNumber = 1;
+            CurrentPage = PageNumber;
+        }
+
         SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = CurrentPage, PageSize = PageSize };
 
         ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
 
         TotalPages = SortFilterPage.NumPages;
     }
