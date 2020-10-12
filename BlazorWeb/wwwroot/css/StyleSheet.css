@@ -1,6 +1,11 @@
 ﻿body {
 }
 
+.nav {
+    z-index: 1;
+    position: relative;
+}
+
 .detail-img {
     max-width: 50%;
     display: block;
@@ -8,9 +13,11 @@
     margin-right: auto;
 }
 
-.Admin-img img {
+.admin-img img {
     max-width: 50%;
-    max-height: 25%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .login-box {

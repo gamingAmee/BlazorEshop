@@ -1,4 +1,6 @@
 ﻿@page "/Admin/AdminIndex"
+@*@attribute [Authorize(Roles = "admin")]*@
+
 <a href="Admin/Create" class="btn btn-info">Add New</a>
 
 <table class="table">
@@ -8,14 +10,16 @@
             @if (product.Images.Count == 0)
             {
                 <td class="col-md-2">
-                    <img class="detail-img" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+                    <div class="admin-img">
+                        <img src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+                    </div>
                 </td>
             }
             else
             {
                 <td class="col-md-2">
-                    <div class="Admin-img">
-                        <img src="@product.Images.FirstOrDefault().Image" alt="Alternate Text" />
+                    <div class="admin-img">
+                        <img src="@product.Images.FirstOrDefault().Image" alt="@product.Name" />
                     </div>
 
                 </td>
