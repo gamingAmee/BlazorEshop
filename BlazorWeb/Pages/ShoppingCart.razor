@@ -1,0 +1,60 @@
+﻿@page "/ShoppingCart"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStore
+@using Newtonsoft.Json;
+
+
+<h3>ShoppingCart</h3>
+<table class="table">
+    @if (shoppingCart != null)
+    {
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Antal</th>
+                <th>Pris</th>
+                <th>Total</th>
+                <th>Slet</th>
+            </tr>
+        </thead>
+        @foreach (var product in shoppingCart)
+        {
+            <tr>
+                <td>
+                    <img src="@product.Images.FirstOrDefault().Image" class="varekurvImg" />
+                </td>
+                <td>
+                    @product.Name
+                </td>
+                <td>
+                    @*<input asp-for="@product.p" />*@
+                </td>
+                <td>
+                    @product.Price
+                </td>
+                @*<td>
+                    @Model.Total
+                </td>*@
+                <td>
+                    <i class="far fa-times-circle"></i>
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+@code {
+
+    List<Product> shoppingCart = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession") != null)
+        {
+            shoppingCart = await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession");
+
+
+        }
+    }
+
+}

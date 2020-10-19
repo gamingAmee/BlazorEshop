@@ -18,6 +18,8 @@ using BlazorWeb.Data;
 using DataLayer.Entities;
 using DataLayer;
 using ServiceLayer.ProjectService;
+using Blazored.LocalStorage;
+using Newtonsoft.Json.Serialization;
 
 namespace BlazorWeb
 {
@@ -34,17 +36,19 @@ namespace BlazorWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages();
+
             services.AddDbContext<EshopContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"))).ToString();
             services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<EshopContext>();
 
-            services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<Customer>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddBlazoredLocalStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +76,7 @@ namespace BlazorWeb
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapRazorPages();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

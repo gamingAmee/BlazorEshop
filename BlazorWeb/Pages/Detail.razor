@@ -1,4 +1,6 @@
 ﻿@page "/Detail/{produktId:int}"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStore
+@using Newtonsoft.Json;
 
 @if (product != null)
 {
@@ -14,8 +16,12 @@
         }
     </div>
 
-    
-    <h3 class="text-center">Pris: @product.Price</h3> 
+
+    <h3 class="text-center">Pris: @product.Price</h3>
+
+
+
+    <button class="btn btn-primary" @onclick="SaveSession">Add to Shopping cart</button>
 }
 else
 {
@@ -27,10 +33,29 @@ else
     [Parameter]
     public int produktId { get; set; }
 
+    List<Product> shoppingCart = new List<Product>();
+
     private Product product;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         product = _ProductService.GetProduktById(produktId).FirstOrDefault();
+
+        if (await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession") != null)
+        {
+            shoppingCart = await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession");
+        }
+    }
+
+    public async void SaveSession()
+    {
+        shoppingCart.Add(product);
+        string test = JsonConvert.SerializeObject(shoppingCart, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+        await LocalStore.SetItemAsync("ShoppingCartSession", test);
     }
 }
