@@ -4,45 +4,42 @@
 
 
 <h3>ShoppingCart</h3>
-<table class="table">
-    @if (shoppingCart != null)
-    {
-        <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th>Antal</th>
-                <th>Pris</th>
-                <th>Total</th>
-                <th>Slet</th>
-            </tr>
-        </thead>
-        @foreach (var product in shoppingCart)
+@if (shoppingCart.Count() > 0)
+{
+    <button @onclick="ClearCart">Clear Shopping cart</button>
+    <div class="card-deck">
+        @foreach (Product product in shoppingCart)
         {
-            <tr>
-                <td>
-                    <img src="@product.Images.FirstOrDefault().Image" class="varekurvImg" />
-                </td>
-                <td>
-                    @product.Name
-                </td>
-                <td>
-                    @*<input asp-for="@product.p" />*@
-                </td>
-                <td>
-                    @product.Price
-                </td>
-                @*<td>
-                    @Model.Total
-                </td>*@
-                <td>
-                    <i class="far fa-times-circle"></i>
-                </td>
-            </tr>
+            <div class="col-md-3">
+                <div class="card my-3">
+                    @if (product.Images.Count > 0)
+                    {
+                        <img class="card-img-top " src="@product.Images.FirstOrDefault().Image">
+                    }
+                    else
+                    {
+                        <img class="card-img-top" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Price</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <button @onclick="@(s => RemoveFromCart(product))">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         }
-    }
+    </div>
+}
+else
+{
+    <h4>The Shopping cart is empty</h4>
+}
 
-</table>
+
 @code {
 
     List<Product> shoppingCart = new List<Product>();
@@ -52,9 +49,24 @@
         if (await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession") != null)
         {
             shoppingCart = await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession");
-
-
         }
     }
 
+    protected async void RemoveFromCart(Product product)
+    {
+        shoppingCart.Remove(product);
+        string test = JsonConvert.SerializeObject(shoppingCart, Formatting.None,
+                       new JsonSerializerSettings()
+                       {
+                           ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                       });
+
+        await LocalStore.SetItemAsync("ShoppingCartSession", test);
+    }
+
+    protected async void ClearCart()
+    {
+        shoppingCart.Clear();
+        await LocalStore.ClearAsync();
+    }
 }
