@@ -1,0 +1,122 @@
+﻿@page "/"
+@page "/Index/{PageNumber:int}"
+@inject IHtmlHelper _htmlHelper;
+
+<div class="input-group mb-3">
+    <input type="search" @bind="SearchTerm" class="form-control">
+    <div class="input-group-append">
+        <button type="button" class="btn btn-outline-secondary" @onclick="@Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
+@*<div class="form-group">
+        <select @bind="orderBy" class="form-control">
+            @foreach (var item in OrderByList)
+            {
+                <option value="@item.Text">@item.Text</option>
+            }
+        </select>
+    </div>*@
+
+
+<div class="card-deck">
+    @foreach (Product product in ProductList)
+    {
+        <div class="col-md-3">
+            <div class="card my-3">
+                @if (product.Images.Count > 0)
+                {
+                    <img class="card-img-top " src="@product.Images.FirstOrDefault().Image">
+                }
+                else
+                {
+                    <img class="card-img-top" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Price</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="/Detail/@product.ProductId">
+                        <i class="fas fa-info-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div>
+    <ul class="pagination">
+        @for (var i = 1; i <= TotalPages; i++)
+        {
+            <li class="page-item @(i == CurrentPage ? "active" : "")">
+                <a href="Index/@i" class="page-link">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
+@code{
+    [Parameter]
+    public int PageNumber { get; set; }
+
+    private List<Product> ProductList;
+
+    private SortFilterPageOptions SortFilterPage { get; set; }
+
+    private OrderByOptions orderBy { get; set; }
+
+    private IEnumerable<SelectListItem> OrderByList { get; set; }
+
+    private string SearchTerm { get; set; }
+
+    #region Page
+    public int CurrentPage { get; set; } = 1;
+    public int Count { get; set; }
+    public int PageSize { get; set; } = 10;
+
+    public int TotalPages { get; set; }
+    #endregion
+
+    protected override void OnInitialized()
+    {
+        SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = CurrentPage, PageSize = PageSize };
+
+        ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
+
+        TotalPages = SortFilterPage.NumPages;
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (PageNumber < 1) PageNumber = 1;
+
+        CurrentPage = PageNumber;
+
+        SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = PageNumber, PageSize = PageSize };
+
+        ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
+    }
+
+    private void Search()
+    {
+        if (PageNumber > 1)
+        {
+            PageNumber = 1;
+            CurrentPage = PageNumber;
+        }
+
+        SortFilterPage = new SortFilterPageOptions { FilterBy = ProductsFilterBy.ByName, FilterValue = SearchTerm, OrderByOptions = orderBy, PageNum = CurrentPage, PageSize = PageSize };
+
+        ProductList = _ProductService.SortFilterPage(SortFilterPage).ToList();
+
+        OrderByList = _htmlHelper.GetEnumSelectList<OrderByOptions>();
+
+        TotalPages = SortFilterPage.NumPages;
+    }
+}

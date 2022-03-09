@@ -1,0 +1,38 @@
+﻿@page "/Admin/Delete/{produktId:int}"
+@inject NavigationManager NavManager
+<h1>Delete!</h1>
+
+@if (product != null)
+{
+    <div class="alert alert-danger">
+        Are you sure you want to delete @product.Name?
+    </div>
+    <form method="post">
+        <button type="button" class="btn btn-danger" @onclick="DeleteProduct">Yes!</button>
+        <a href="Admin/AdminIndex" class="btn btn-outline-danger">Cancel</a>
+    </form>
+}
+else
+{
+    <h3>The product was not found</h3>
+}
+
+@code {
+    [Parameter]
+    public int produktId { get; set; }
+
+    private Product product;
+
+    protected override void OnInitialized()
+    {
+        product = _ProductService.GetProduktById(produktId).FirstOrDefault();
+
+    }
+
+    private async Task DeleteProduct()
+    {
+        await _ProductService.DeleteProduct(produktId);
+
+        NavManager.NavigateTo("/Admin/AdminIndex");
+    }
+}

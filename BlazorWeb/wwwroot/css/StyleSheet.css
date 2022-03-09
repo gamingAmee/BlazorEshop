@@ -1,0 +1,36 @@
+﻿body {
+}
+
+.nav {
+    z-index: 1;
+    position: relative;
+}
+
+.detail-img {
+    max-width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.admin-img img {
+    max-width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-box {
+    margin: auto;
+    margin-bottom:30%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    align-content: center;
+}
+
+.Register-box {
+    margin-bottom: 30%;
+    text-align: center;
+    align-content: center;
+}

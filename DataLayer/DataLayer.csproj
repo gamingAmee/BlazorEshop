@@ -1,12 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+    <Compile Remove="Migrations\20200825120411_init.cs" />
+    <Compile Remove="Migrations\20200825120411_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825120535_init.cs" />
+    <Compile Remove="Migrations\20200825120535_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825120627_init.cs" />
+    <Compile Remove="Migrations\20200825120627_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825120747_init.cs" />
+    <Compile Remove="Migrations\20200825120747_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825120915_init.cs" />
+    <Compile Remove="Migrations\20200825120915_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825121643_init.cs" />
+    <Compile Remove="Migrations\20200825121643_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825122114_init.cs" />
+    <Compile Remove="Migrations\20200825122114_init.Designer.cs" />
+    <Compile Remove="Migrations\20200825123048_init.cs" />
+    <Compile Remove="Migrations\20200825123048_init.Designer.cs" />
+    <Compile Remove="Migrations\20200901070001_Test.cs" />
+    <Compile Remove="Migrations\20200901070001_Test.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

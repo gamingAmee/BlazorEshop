@@ -1,0 +1,63 @@
+﻿@page "/Detail/{produktId:int}"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStore
+@using Newtonsoft.Json;
+@inject NavigationManager NavManager
+
+@if (product != null)
+{
+    <h2 class="text-center">@product.Name</h2>
+    <div>
+        @if (product.Images.Count == 0)
+        {
+            <img class="img-thumbnail my-4 detail-img" src="https://cdn.vanderbilt.edu/vu-wp0/wp-content/uploads/sites/181/2019/09/09091628/Image-Coming-Soon.png">
+        }
+        else
+        {
+            <img src="@product.Images.FirstOrDefault().Image" alt="Alternate Text" class="img-thumbnail my-4 detail-img" />
+        }
+    </div>
+
+
+    <h3 class="text-center">Pris: @product.Price</h3>
+
+
+
+    <button type="button" class="btn btn-primary" @onclick="SaveSession">Add to Shopping cart</button>
+
+}
+else
+{
+    <h3>The product was not found</h3>
+}
+
+@code {
+
+    [Parameter]
+    public int produktId { get; set; }
+
+    List<Product> shoppingCart = new List<Product>();
+
+    private Product product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = _ProductService.GetProduktById(produktId).FirstOrDefault();
+
+        if (await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession") != null)
+        {
+            shoppingCart = await LocalStore.GetItemAsync<List<Product>>("ShoppingCartSession");
+        }
+    }
+
+    protected async void SaveSession()
+    {
+        shoppingCart.Add(product);
+        string test = JsonConvert.SerializeObject(shoppingCart, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
+
+        await LocalStore.SetItemAsync("ShoppingCartSession", test);
+    }
+}
